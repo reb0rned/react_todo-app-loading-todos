@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
 import { Header } from './components/Header';
@@ -9,14 +9,13 @@ import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { Todo } from './types/Todo';
 import { ErrorType } from './types/Error';
-import { FilterBy } from './types/Filter';
+import { TodoStatus } from './types/TodoStatus';
+import { useErrorHandler } from './hooks/useErrorHandler';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState<ErrorType | null>(null);
-  const [filter, setFilter] = useState<FilterBy>(FilterBy.all);
-  const [activeCount, setActiveCount] = useState(0);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [filter, setFilter] = useState<TodoStatus>(TodoStatus.all);
+  const {error, handleError} = useErrorHandler()
 
   const receiveData = async () => {
     try {
@@ -24,15 +23,7 @@ export const App: React.FC = () => {
 
       setTodos(data);
     } catch (err) {
-      setError(ErrorType.loading_error);
-
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-
-      timerRef.current = setTimeout(() => {
-        setError(null);
-      }, 3000);
+      handleError(ErrorType.loading_error, 3000);
     }
   };
 
@@ -42,33 +33,25 @@ export const App: React.FC = () => {
     );
   };
 
-  const filterData = (filterBy: FilterBy) => {
-    if (filterBy === FilterBy.active) {
-      return todos.filter(todo => !todo.completed);
-    }
+  const filterData = (filterBy: TodoStatus) => {
+    switch (filterBy) {
+      case TodoStatus.active:
+        return todos.filter(todo => !todo.completed);
 
-    if (filterBy === FilterBy.completed) {
-      return todos.filter(todo => todo.completed);
-    }
+      case TodoStatus.completed:
+        return todos.filter(todo => todo.completed);
 
-    return todos;
+      default:
+        return todos;
+    }
   };
 
   useEffect(() => {
     receiveData();
-
-    return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-    };
   }, []);
 
-  useEffect(() => {
-    setActiveCount(todos.filter(todo => !todo.completed).length);
-  }, [todos]);
-
   const visibleTodos = filterData(filter);
+  const activeCount = todos.filter(todo => !todo.completed).length;
 
   return (
     <div className="todoapp">
@@ -96,7 +79,7 @@ export const App: React.FC = () => {
             )}
           </div>
 
-          <Error error={error} setError={setError} />
+          <Error error={error} setError={handleError} />
         </>
       )}
     </div>

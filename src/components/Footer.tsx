@@ -1,10 +1,10 @@
 import React from 'react';
 import cn from 'classnames';
-import { FilterBy } from '../types/Filter';
+import { TodoStatus } from '../types/TodoStatus';
 
 type Props = {
-  filterBy: FilterBy;
-  setFilterBy: (value: FilterBy) => void;
+  filterBy: TodoStatus;
+  setFilterBy: (value: TodoStatus) => void;
   activeCount: number;
 };
 
@@ -24,10 +24,10 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/"
           className={cn('filter__link', {
-            selected: filterBy === FilterBy.all,
+            selected: filterBy === TodoStatus.all,
           })}
           data-cy="FilterLinkAll"
-          onClick={() => setFilterBy(FilterBy.all)}
+          onClick={() => setFilterBy(TodoStatus.all)}
         >
           All
         </a>
@@ -35,10 +35,10 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/active"
           className={cn('filter__link', {
-            selected: filterBy === FilterBy.active,
+            selected: filterBy === TodoStatus.active,
           })}
           data-cy="FilterLinkActive"
-          onClick={() => setFilterBy(FilterBy.active)}
+          onClick={() => setFilterBy(TodoStatus.active)}
         >
           Active
         </a>
@@ -46,10 +46,10 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/completed"
           className={cn('filter__link', {
-            selected: filterBy === FilterBy.completed,
+            selected: filterBy === TodoStatus.completed,
           })}
           data-cy="FilterLinkCompleted"
-          onClick={() => setFilterBy(FilterBy.completed)}
+          onClick={() => setFilterBy(TodoStatus.completed)}
         >
           Completed
         </a>

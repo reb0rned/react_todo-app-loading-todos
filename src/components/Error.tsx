@@ -1,10 +1,10 @@
 import React from 'react';
-import { Error_type } from '../types/Error';
+import { ErrorType } from '../types/Error';
 import cn from 'classnames';
 
 type Props = {
-  error: Error_type | null;
-  setError: (value: Error_type | null) => void;
+  error: ErrorType | null;
+  setError: (value: ErrorType | null, timer?: number) => void;
 };
 
 export const Error: React.FC<Props> = ({ error, setError }) => {

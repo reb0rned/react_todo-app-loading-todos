@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState } from 'react';
+import React from 'react';
 import { Todo } from '../types/Todo';
 import { updateTodos } from '../api/todos';
 import cn from 'classnames';
@@ -11,16 +11,12 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo, setUpdateTodoStatus }) => {
-  const [status, setStatus] = useState(todo.completed);
 
   const settingStatus = async (id: number, newStatus: boolean) => {
-    setStatus(newStatus);
-
     try {
       await updateTodos(id, { completed: newStatus });
-      setUpdateTodoStatus(todo.id, newStatus);
+      setUpdateTodoStatus(id, newStatus);
     } catch (e) {
-      setStatus(!newStatus);
     }
   };
 
@@ -29,7 +25,7 @@ export const TodoItem: React.FC<Props> = ({ todo, setUpdateTodoStatus }) => {
       key={todo.id}
       data-cy="Todo"
       className={cn('todo', {
-        completed: status,
+        completed: todo.completed,
       })}
     >
       <label className="todo__status-label">
@@ -37,9 +33,9 @@ export const TodoItem: React.FC<Props> = ({ todo, setUpdateTodoStatus }) => {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked={status}
+          checked={todo.completed}
           onChange={() => {
-            settingStatus(todo.id, !status);
+            settingStatus(todo.id, !todo.completed);
           }}
         />
       </label>
