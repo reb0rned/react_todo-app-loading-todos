@@ -48,7 +48,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     receiveData();
-  });
+  }, []);
 
   const visibleTodos = filterData(filter);
   const activeCount = todos.filter(todo => !todo.completed).length;
