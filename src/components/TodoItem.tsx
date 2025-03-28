@@ -11,13 +11,11 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo, setUpdateTodoStatus }) => {
-
   const settingStatus = async (id: number, newStatus: boolean) => {
     try {
       await updateTodos(id, { completed: newStatus });
       setUpdateTodoStatus(id, newStatus);
-    } catch (e) {
-    }
+    } catch (e) {}
   };
 
   return (

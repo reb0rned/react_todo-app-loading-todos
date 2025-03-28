@@ -15,7 +15,7 @@ import { useErrorHandler } from './hooks/useErrorHandler';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<TodoStatus>(TodoStatus.all);
-  const {error, handleError} = useErrorHandler()
+  const { error, handleError } = useErrorHandler();
 
   const receiveData = async () => {
     try {
@@ -48,7 +48,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     receiveData();
-  }, []);
+  });
 
   const visibleTodos = filterData(filter);
   const activeCount = todos.filter(todo => !todo.completed).length;
